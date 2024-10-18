@@ -30,6 +30,6 @@ def obtener_clima(ciudad):
         print(f"Detalles técnicos: {e}")
 
 
-if __.name__ == '__main__':
+if __name__ == '__main__':
     ciudad = input("Ingrese el nombre de la ciudad: ")
     obtener_clima(ciudad)
