@@ -9,6 +9,8 @@ def cambiarTemperatura(sistema):
     if sistema.upper() == 'C':
         simbolo = 'C'
         unidad = 'metric'
-        return simbolo
+        return {
+            simbolo,
+            unidad
+            }
     
-    print("unidad elegida: ", sistema)

@@ -1,8 +1,9 @@
 from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
 from cambiarTemperatura import cambiarTemperatura 
 def obtener_clima(ciudad, unidad):
+    
     while True:
-        datos = llamadaApi(ciudad)  # Llamar a la función para obtener los datos
+        datos = llamadaApi(ciudad, unidad)  # Llamar a la función para obtener los datos
         
         if datos is not None:  # Si hay datos, se extrae el clima
             clima = datos['main']
