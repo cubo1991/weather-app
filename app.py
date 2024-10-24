@@ -1,35 +1,33 @@
-import requests
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-api_key = os.getenv('API_KEY')
-
-def obtener_clima(ciudad):
-   
-    try :
-        url = f'http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&units=metric'
-        respuesta = requests.get(url)
-        if respuesta.status_code == 200:
-            datos = respuesta.json()
+from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
+from cambiarTemperatura import cambiarTemperatura 
+def obtener_clima(ciudad, unidad):
+    while True:
+        datos = llamadaApi(ciudad)  # Llamar a la función para obtener los datos
+        
+        if datos is not None:  # Si hay datos, se extrae el clima
             clima = datos['main']
             print(f"Ciudad: {ciudad}")
-            print(f"Temperatura: {clima['temp']}°C")
-            print(f"Maxima: {clima['temp_max']}°C")
-            print(f"Minima: {clima['temp_min']}°C")
+            print(f"Temperatura: {clima['temp']}, {unidad}")
+            print(f"Maxima: {clima['temp_max']}, {unidad}")
+            print(f"Minima: {clima['temp_min']}, {unidad}")
             print(f"Humedad: {clima['humidity']}%")
-        elif respuesta.status_code == 404:
-                # Si la ciudad no existe
-                print(f"Error: La ciudad '{ciudad}' no fue encontrada.")
         else:
-            # Otros errores relacionados con la API
-            print(f"Error: No se pudo obtener el clima para '{ciudad}'. (Código {respuesta.status_code})")
-    except requests.exceptions.RequestException as e:
-        # Manejo de cualquier otro error de conexión o solicitud
-        print("Error: Ocurrió un problema al intentar conectarse a la API. Inténtalo de nuevo más tarde.")
-        print(f"Detalles técnicos: {e}")
+            print(f"No se pudo obtener el clima para '{ciudad}' debido a un error.")
+        continuar = input(f'¿Desea continuar con otra ciudad? NO para salir.\n')
+       
+        if continuar.upper() == "NO":
+            break 
+        else: 
+            
+            ciudad = input("Ingrese el nombre de la ciudad: ")
+            unidad = input("Ingrese la unidad de Temperatura deseada: ")
+            cambiarTemperatura(unidad)
 
+         
 
+            
 if __name__ == '__main__':
     ciudad = input("Ingrese el nombre de la ciudad: ")
-    obtener_clima(ciudad)
+    unidad = input("Ingrese la unidad de Temperatura deseada: ")
+    cambiarTemperatura(unidad)
+    obtener_clima(ciudad, unidad)
