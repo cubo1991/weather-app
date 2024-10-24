@@ -7,9 +7,9 @@ def obtener_clima(ciudad, unidad):
         if datos is not None:  # Si hay datos, se extrae el clima
             clima = datos['main']
             print(f"Ciudad: {ciudad}")
-            print(f"Temperatura: {clima['temp']}, {unidad}")
-            print(f"Maxima: {clima['temp_max']}, {unidad}")
-            print(f"Minima: {clima['temp_min']}, {unidad}")
+            print(f"Temperatura: {clima['temp']}")
+            print(f"Maxima: {clima['temp_max']}")
+            print(f"Minima: {clima['temp_min']}")
             print(f"Humedad: {clima['humidity']}%")
         else:
             print(f"No se pudo obtener el clima para '{ciudad}' debido a un error.")
