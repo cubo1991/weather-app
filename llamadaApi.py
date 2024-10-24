@@ -8,6 +8,7 @@ api_key = os.getenv('API_KEY')
 
 def llamadaApi(ciudad, unidad):
     url = f'http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&units={unidad}'
+    print(f'{url}')
     try:
         respuesta = requests.get(url)
         
