@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv('API_KEY')
 
-def llamadaApi(ciudad):
-    url = f'http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&units=metric'
+def llamadaApi(ciudad, unidad):
+    url = f'http://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={api_key}&units={unidad}'
     try:
         respuesta = requests.get(url)
         
