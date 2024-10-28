@@ -1,37 +1,36 @@
-from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
-from cambiarTemperatura import cambiarTemperatura 
-def obtener_clima(ciudad, unidad):
-    simbolo, unidad = cambiarTemperatura(unidad)
-   
+from obtenerClima import obtener_clima
+from cambiarTemperatura import cambiarTemperatura
+from pronosticoExtendido import pronostico_extendido  # Asegúrate de tener esta función implementada
 
+def mostrar_menu():
+    print("----- Menú -----")
+    print("1. Obtener clima")
+    print("2. Pronóstico extendido")
+    print("3. Salir")
+    print("----------------")
+
+def main():
     while True:
-      
-        datos = llamadaApi(ciudad, unidad)  # Llamar a la función para obtener los datos
-        
-        if datos is not None:  # Si hay datos, se extrae el clima
-            clima = datos['main']
-            print(f"Ciudad: {ciudad}")
-            print(f"Temperatura: {clima['temp']}°{simbolo}")
-            print(f"Maxima: {clima['temp_max']}°{simbolo}")
-            print(f"Minima: {clima['temp_min']}°{simbolo}")
-            print(f"Humedad: {clima['humidity']}%")
-        else:
-            print(f"No se pudo obtener el clima para '{ciudad}' debido a un error.")
-        continuar = input(f'¿Desea continuar con otra ciudad? NO para salir.\n')
-       
-        if continuar.upper() == "NO":
-            break 
-        else: 
-            
+        mostrar_menu()
+        opcion = input("Seleccione una opción (1-3): ")
+
+        if opcion == '1':
             ciudad = input("Ingrese el nombre de la ciudad: ")
-            unidad = input("Ingrese la unidad de Temperatura deseada: ")
-            simbolo, unidad = cambiarTemperatura(unidad)
+            unidad = input("Ingrese la unidad de temperatura deseada: ")
+            cambiarTemperatura(unidad)
+            obtener_clima(ciudad, unidad)
 
-         
+        elif opcion == '2':
+            ciudad = input("Ingrese el nombre de la ciudad: ")
+            unidad = input("Ingrese la unidad de temperatura deseada: ")
+            pronostico_extendido(ciudad, unidad)
 
-            
+        elif opcion == '3':
+            print("Saliendo del programa...")
+            break
+
+        else:
+            print("Opción no válida. Por favor, intente de nuevo.")
+
 if __name__ == '__main__':
-    ciudad = input("Ingrese el nombre de la ciudad: ")
-    unidad = input("Ingrese la unidad de Temperatura deseada: ")
-    cambiarTemperatura(unidad)
-    obtener_clima(ciudad, unidad)
+    main()
