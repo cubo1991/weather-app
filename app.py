@@ -1,4 +1,5 @@
 from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
+from pronosticoExtendido import pronostico_extendido
 
 simbolo = "F"
 unidad = "imperial"
@@ -28,4 +29,7 @@ def obtener_clima(ciudad):
             
 if __name__ == '__main__':
     ciudad = input("Ingrese el nombre de la ciudad: ")
-    obtener_clima(ciudad)
+    unidad = input("Ingrese unidad de temperatura: ")
+    #obtener_clima(ciudad)
+    pronostico_extendido(ciudad, unidad)
+    
