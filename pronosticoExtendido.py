@@ -1,3 +1,4 @@
+
 import requests
 import os
 from dotenv import load_dotenv
@@ -87,3 +88,4 @@ def pronostico_extendido(ciudad, unidad):
             contador += 1
         else:
             break
+
