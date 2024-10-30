@@ -1,8 +1,11 @@
 from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
+
+from pronosticoExtendido import pronostico_extendido
+
 from cambiarTemperatura import cambiarTemperatura 
 def obtener_clima(ciudad, unidad):
     simbolo, unidad = cambiarTemperatura(unidad)
-   
+
 
     while True:
       
@@ -32,6 +35,8 @@ def obtener_clima(ciudad, unidad):
             
 if __name__ == '__main__':
     ciudad = input("Ingrese el nombre de la ciudad: ")
-    unidad = input("Ingrese la unidad de Temperatura deseada: ")
-    cambiarTemperatura(unidad)
-    obtener_clima(ciudad, unidad)
+    unidad = input("Ingrese unidad de temperatura: ")
+    #obtener_clima(ciudad)
+    pronostico_extendido(ciudad, unidad)
+    
+
