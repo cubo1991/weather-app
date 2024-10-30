@@ -10,3 +10,5 @@ def cambiarTemperatura(sistema):
         simbolo = 'C'
         unidad = 'metric'
         return simbolo, unidad
+            
+    
