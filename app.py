@@ -1,18 +1,15 @@
-from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
 from obtenerClima import obtener_clima
-from pronosticoExtendido import pronostico_extendido
+from cambiarTemperatura import cambiarTemperatura
+from pronosticoExtendido import pronostico_extendido  # Asegúrate de tener esta función implementada
 
-from cambiarTemperatura import cambiarTemperatura 
+def mostrar_menu():
+    print("----- Menú -----")
+    print("1. Obtener clima")
+    print("2. Pronóstico extendido")
+    print("3. Salir")
+    print("----------------")
+
 def main():
-
-
-    def mostrar_menu():
-        print("----- Menú -----")
-        print("1. Obtener clima")
-        print("2. Pronóstico extendido")
-        print("3. Salir")
-        print("----------------")
-    
     while True:
         mostrar_menu()
         opcion = input("Seleccione una opción (1-3): ")
@@ -38,5 +35,4 @@ def main():
 if __name__ == '__main__':
 
     main()
-
 
