@@ -1,98 +1,143 @@
 import tkinter
-from app import obtener_clima
+from app import obtener_clima, pronostico_extendido
 
+# Función para mostrar el menú de inicio
+def mostrar_menu():
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    botonClimaActual = tkinter.Button(frame, text="Clima actual", command=mostrar_campos_clima_actual)
+    botonClimaActual.pack(pady=10)
+    botonPronosticoExtendido = tkinter.Button(frame, text="Pronóstico extendido", command=mostrar_campos_pronostico)
+    botonPronosticoExtendido.pack(pady=10)
+
+# Función para mostrar los campos de entrada para el clima actual
+def mostrar_campos_clima_actual():
+    for widget in frame.winfo_children():
+        widget.destroy()
+        
+    etiquetaCiudad = tkinter.Label(frame, text="Ingrese la ciudad:")
+    etiquetaCiudad.pack()
+    cajaCiudad = tkinter.Entry(frame)
+    cajaCiudad.pack()
+
+    etiquetaUnidad = tkinter.Label(frame, text="Ingrese la unidad de temperatura (C/F):")
+    etiquetaUnidad.pack()
+    cajaUnidad = tkinter.Entry(frame)
+    cajaUnidad.pack()
+
+    botonObtenerClima = tkinter.Button(frame, text="Obtener Clima", command=lambda: obtenerClima(cajaCiudad.get(), cajaUnidad.get()))
+    botonObtenerClima.pack(pady=10)
+    botonVolver = tkinter.Button(frame, text="Volver al menú", command=mostrar_menu)
+    botonVolver.pack(pady=5)
+    botonCerrar = tkinter.Button(frame, text="Cerrar", command=ventana.quit)
+    botonCerrar.pack(pady=5)
+
+# Función para mostrar los campos de entrada para el pronóstico extendido
+def mostrar_campos_pronostico():
+    for widget in frame.winfo_children():
+        widget.destroy()
+        
+    etiquetaCiudad = tkinter.Label(frame, text="Ingrese la ciudad:")
+    etiquetaCiudad.pack()
+    cajaCiudad = tkinter.Entry(frame)
+    cajaCiudad.pack()
+
+    etiquetaUnidad = tkinter.Label(frame, text="Ingrese la unidad de temperatura (C/F):")
+    etiquetaUnidad.pack()
+    cajaUnidad = tkinter.Entry(frame)
+    cajaUnidad.pack()
+
+    botonObtenerPronostico = tkinter.Button(frame, text="Obtener Pronóstico", command=lambda: obtenerPronostico(cajaCiudad.get(), cajaUnidad.get()))
+    botonObtenerPronostico.pack(pady=10)
+    botonVolver = tkinter.Button(frame, text="Volver al menú", command=mostrar_menu)
+    botonVolver.pack(pady=5)
+    botonCerrar = tkinter.Button(frame, text="Cerrar", command=ventana.quit)
+    botonCerrar.pack(pady=5)
+
+# Función para obtener el clima actual
+def obtenerClima(ciudad, unidad):
+    resultado = obtener_clima(ciudad, unidad)
+    mostrar_resultado(resultado)
+
+# Función para obtener el pronóstico extendido
+def obtenerPronostico(ciudad, unidad):
+    global dias_pronostico, indice_dia
+    dias_pronostico = pronostico_extendido(ciudad, unidad)
+    print(f"Datos del pronóstico: {dias_pronostico}")  # Ver los datos recibidos
+    indice_dia = 0
+    if isinstance(dias_pronostico, list) and len(dias_pronostico) > 0:
+        mostrar_dia()
+    else:
+        mostrar_resultado("Error al obtener el pronóstico. Verifique la ciudad y la unidad.")
+
+# Función para mostrar el día actual del pronóstico
+def mostrar_dia():
+    for widget in frame.winfo_children():
+        widget.destroy()
+    
+    try:
+        dia_actual = dias_pronostico[indice_dia]
+        print(f"Día actual: {dia_actual}")  # Ver el día que se va a mostrar
+        texto_dia = (
+            f"Fecha: {dia_actual['fecha']}\n"
+            f"Temperatura: {dia_actual['temperatura']}°\n"
+            f"Temperatura mínima: {dia_actual['temp_min']}°\n"
+            f"Temperatura máxima: {dia_actual['temp_max']}°\n"
+            f"Descripción: {dia_actual['descripcion']}\n"
+            f"Humedad: {dia_actual['humedad']}%\n"
+            f"Velocidad del viento: {dia_actual['velocidad_viento']} m/s\n"
+        )
+    except (KeyError, TypeError) as e:
+        texto_dia = f"Error de formato de datos: {e}"
+        print(f"Error: {e}")  # Mostrar el error en la consola
+
+    etiquetaDia = tkinter.Label(frame, text=texto_dia, justify="left")
+    etiquetaDia.pack()
+
+    # Botones de navegación
+    if indice_dia > 0:
+        botonAnterior = tkinter.Button(frame, text="Día anterior", command=lambda: navegar_dia(-1))
+        botonAnterior.pack(side="left", padx=5)
+    if indice_dia < len(dias_pronostico) - 1:
+        botonSiguiente = tkinter.Button(frame, text="Día siguiente", command=lambda: navegar_dia(1))
+        botonSiguiente.pack(side="right", padx=5)
+
+    botonVolver = tkinter.Button(frame, text="Volver al menú", command=mostrar_menu)
+    botonVolver.pack(pady=5)
+    botonCerrar = tkinter.Button(frame, text="Cerrar", command=ventana.quit)
+    botonCerrar.pack(pady=5)
+
+# Función para navegar entre días
+def navegar_dia(direccion):
+    global indice_dia
+    indice_dia += direccion
+    mostrar_dia()
+
+# Función para mostrar el resultado en la interfaz
+def mostrar_resultado(resultado):
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    etiquetaResultado = tkinter.Label(frame, text=resultado, justify="left", wraplength=400)
+    etiquetaResultado.pack()
+
+    botonVolver = tkinter.Button(frame, text="Volver al menú", command=mostrar_menu)
+    botonVolver.pack(pady=5)
+    botonCerrar = tkinter.Button(frame, text="Cerrar", command=ventana.quit)
+    botonCerrar.pack(pady=5)
+
+# Configuración de la ventana principal
 ventana = tkinter.Tk()
 ventana.geometry("500x500")
+ventana.title("App del Clima")
 
 # Crear un Frame para centrar el contenido
 frame = tkinter.Frame(ventana)
-frame.pack(expand=True)  # Permitir que el Frame se expanda en el centro
+frame.pack(expand=True)
 
-# Función para obtener el clima
-def obtenerClima(boton):
-    # Obtener los valores de las cajas de texto
-    ciudad = cajaCiudad.get()
-    unidad = cajaTemperatura.get()
-    
-    # Llamar a la función obtener_clima con las variables
-    resultado = obtener_clima(ciudad, unidad)
-    
-    # Mostrar el resultado en el label
-    resultadoLabel.config(text=resultado)
+# Mostrar el menú inicial
+mostrar_menu()
 
-    # Preguntar si desea continuar con otra consulta
-    continuarLabel.config(text="¿Desea realizar otra consulta? (S/N)")
-    cajaContinuar.grid(row=8, column=0, padx=10)  # Mostrar la caja de texto para continuar
-    botonContinuar.grid()  # Mostrar el botón de continuar
-    boton.grid_remove()  # Ocultar el botón "Clima actual"
-
-# Procesar la respuesta del usuario
-def procesarContinuar():
-    respuesta = cajaContinuar.get().strip().upper()
-
-    # Procesar la respuesta del usuario
-    if respuesta == "S":
-        # Limpiar las entradas y el label de resultados
-        cajaCiudad.delete(0, tkinter.END)
-        cajaTemperatura.delete(0, tkinter.END)
-        resultadoLabel.config(text="")
-        continuarLabel.config(text="")
-        cajaContinuar.delete(0, tkinter.END)  # Limpiar caja de continuar
-        cajaContinuar.grid_remove()  # Ocultar la caja de continuar
-        botonContinuar.grid_remove()  # Ocultar el botón de continuar
-        botonClimaActual.grid()  # Volver a mostrar el botón "Clima actual"
-
-        # Reiniciar la aplicación (opcional)
-        iniciarAplicacion()
-
-    elif respuesta == "N":
-        ventana.destroy()  # Cerrar la aplicación
-
-    else:
-        continuarLabel.config(text="Respuesta inválida. Por favor, ingrese 'S' o 'N'.")
-
-def iniciarAplicacion():
-    # Reiniciar todos los elementos de la interfaz
-    resultadoLabel.config(text="")
-    continuarLabel.config(text="")
-    cajaContinuar.grid_remove()  # Ocultar la caja de continuar
-    botonContinuar.grid_remove()  # Ocultar el botón de continuar
-
-# Etiqueta para la entrada de ciudad
-tituloIngreseCiudad = tkinter.Label(frame, text="Ingrese el nombre de la ciudad")
-tituloIngreseCiudad.grid(row=0, column=0, padx=10, pady=(10, 0))  # Espacio superior
-
-# Caja de entrada para ciudad
-cajaCiudad = tkinter.Entry(frame)
-cajaCiudad.grid(row=1, column=0, padx=10, pady=(0, 10))  # Espacio inferior
-
-# Etiqueta para la entrada de unidad
-tituloIngreseUnidad = tkinter.Label(frame, text="Ingrese la unidad de temperatura (C/F):")
-tituloIngreseUnidad.grid(row=2, column=0, padx=10, pady=(10, 0))  # Espacio superior
-
-# Caja de entrada para unidad
-cajaTemperatura = tkinter.Entry(frame)
-cajaTemperatura.grid(row=3, column=0, padx=10, pady=(0, 20))  # Espacio inferior
-
-# Label para mostrar los resultados
-resultadoLabel = tkinter.Label(frame, text="")
-resultadoLabel.grid(row=4, column=0, padx=10, pady=(10, 0))  # Espacio superior
-
-# Label para preguntar si quiere continuar
-continuarLabel = tkinter.Label(frame, text="")
-continuarLabel.grid(row=5, column=0, padx=10, pady=(10, 0))  # Espacio superior
-
-# Caja de texto para continuar (declarar fuera de las funciones)
-cajaContinuar = tkinter.Entry(frame)
-
-# Botón para obtener el clima
-botonClimaActual = tkinter.Button(frame, text="Clima actual", command=lambda: obtenerClima(botonClimaActual))
-botonClimaActual.grid(row=6, column=0, padx=10, pady=(10, 20))  # Espacio inferior
-
-# Botón para procesar continuar (inicialmente oculto)
-botonContinuar = tkinter.Button(frame, text="Continuar", command=procesarContinuar)
-botonContinuar.grid(row=7, column=0, padx=10, pady=(10, 0))  # Posición inicial
-botonContinuar.grid_remove()  # Ocultar el botón al inicio
-
-ventana.title("App del Clima")
+# Ejecutar la aplicación
 ventana.mainloop()
