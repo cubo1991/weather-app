@@ -1,26 +1,30 @@
 historial = []
 
-def agregarAlHistorial (consulta):
-    if consulta is not None:
-        historial.append(consulta)
-        print("Consulta agregada al historial")
-    else:
-        print("Error, la consulta no fue recibida por esta funcion")
+def agregarAlHistorial(resultado):
+    with open('historial.txt', 'a') as file:
+        file.write(resultado + '\n')
 
 def mostrarHistorial():
-
-    if not historial:
-        print("No se han realizado consultas")
-        print("Para hacerlo, ingresa la opcion 1 del menú")
-    else:
-
-        for i, consulta in enumerate(historial):
-            print("-------------",i+1,"-------------")
-            print(consulta)
+    try:
+        with open('historial.txt', 'r') as file:
+            print(file.read())
+    except FileNotFoundError:
+        print("No hay consultas en el historial.")
     
-def eliminar_consulta(historial, indice):
-    if 0 <= indice < len(historial): 
-        elemento = historial.pop(indice+1)
-        print(f"Elemento '{elemento}' eliminado en el índice {indice+1}.")
-    else:
-        print("Índice fuera de rango.")
+def eliminar_consulta(indice):
+    try:
+        with open('historial.txt', 'r') as file:
+            lines = file.readlines()
+        if 1 <= indice <= len(lines) // 5:
+            del lines[(indice - 1) * 5: indice * 5]
+            with open('historial.txt', 'w') as file:
+                file.writelines(lines)
+        else:
+            print("Índice fuera de rango.")
+    except FileNotFoundError:
+        print("No hay consultas en el historial.")
+        
+        
+def borrarHistorial():
+    with open('historial.txt', 'w') as file:
+        pass

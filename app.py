@@ -3,18 +3,19 @@ from cambiarTemperatura import cambiarTemperatura
 from pronosticoExtendido import pronostico_extendido  # Asegúrate de tener esta función implementada
 from historialConsultas import mostrarHistorial
 from historialConsultas import eliminar_consulta
-from historialConsultas import historial
+from historialConsultas import borrarHistorial
 
 def mostrar_menu():
     print("----- Menú -----")
     print("1. Obtener clima")
     print("2. Pronóstico extendido")
-    print("3. Ver historial de consultas")
-    print("4. Eliminar una consulta")
+    print("3. Ver historial")
+    print("4. Eliminar consulta")
     print("5. Salir")
     print("----------------")
 
 def main():
+    borrarHistorial()
     while True:
         mostrar_menu()
         opcion = input("Seleccione una opción (1-5): ")
@@ -31,23 +32,18 @@ def main():
             pronostico_extendido(ciudad, unidad)
 
         elif opcion == '3':
-            print("-----------Historial------------")
+            print("--------Historial--------")
             mostrarHistorial()
-            print("--------------------------------")
-        
+            print("-------------------------")
+
         elif opcion == '4':
-            print("----------Eliminar Consulta----------")
-            print("Ingrese el orden del elemento que desea eliminar")
-            print("Para ver el orden, primero ingrese al historial")
-            orden = int(input("Orden: "))
-            eliminar_consulta(historial, orden)
-            print("Elemento ", orden, " eliminado del historial")
-            
+            indice = int(input("Ingrese el número de la consulta a eliminar: "))
+            eliminar_consulta(indice)
         
         elif opcion == '5':
-            print("Saliendo del programa...")
-            break
-
+                    print("Saliendo del programa...")
+                    break
+                
         else:
             print("Opción no válida. Por favor, intente de nuevo.")
 

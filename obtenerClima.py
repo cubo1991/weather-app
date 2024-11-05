@@ -1,7 +1,6 @@
 from cambiarTemperatura import cambiarTemperatura 
 from llamadaApi import llamadaApi  # Importar la función desde llamadaApi.py
 from historialConsultas import agregarAlHistorial
-from historialConsultas import mostrarHistorial
 
 def obtener_clima(ciudad, unidad):
     simbolo, unidad = cambiarTemperatura(unidad)
