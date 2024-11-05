@@ -6,9 +6,8 @@ def cambiarTemperatura(sistema):
         simbolo = 'F'
         unidad = 'imperial'
         return simbolo, unidad
+    
     if sistema.upper() == 'C':
         simbolo = 'C'
         unidad = 'metric'
         return simbolo, unidad
-            
-    
