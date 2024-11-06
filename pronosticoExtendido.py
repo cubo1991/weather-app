@@ -3,9 +3,14 @@ import os
 from dotenv import load_dotenv
 import datetime 
 from cambiarTemperatura import cambiarTemperatura 
+from rich.panel import Panel
+from rich.console import Console
+from rich.table import Table
+from rich.box import SIMPLE
 
 load_dotenv()
 api_key = os.getenv('API_KEY')
+Console = Console()
 
 def pronostico_extendido(ciudad, unidad):
     simbolo, unidad = cambiarTemperatura(unidad)
@@ -17,14 +22,14 @@ def pronostico_extendido(ciudad, unidad):
             datos = respuesta.json()
             coordenadas = datos["coord"]
         elif respuesta.status_code == 404:
-            print(f"Error: La ciudad '{ciudad}' no fue encontrada.")
+            Console.print(f"[bold_red]Error:[/bold_red] La ciudad '{ciudad}' no fue encontrada.")
             return []
         else:
-            print(f"Error: No se pudo obtener el clima para '{ciudad}'. Código {respuesta.status_code}.")
+            Console.print(f"[bold_red]Error:[/bold_red] No se pudo obtener el clima para '{ciudad}'. Código {respuesta.status_code}.")
             return []
     except requests.exceptions.RequestException as e:
-        print("Error: Ocurrió un problema al intentar conectarse a la API.")
-        print(f"Detalles técnicos: {e}")
+        Console.print("[bold_red]Error:[/vold_red] Ocurrió un problema al intentar conectarse a la API.")
+        Console.print(f"[bold_red]Detalles técnicos:[/bold_red] {e}")
         return []
 
     latitud = coordenadas['lat']
@@ -36,11 +41,11 @@ def pronostico_extendido(ciudad, unidad):
         if respuesta.status_code == 200:
             weather_data = respuesta.json()
         else:
-            print(f"Error: No se pudo obtener el clima extendido para '{ciudad}'. Código {respuesta.status_code}.")
+            Console.print(f"[bold_red]Error:[/bold_red] No se pudo obtener el clima extendido para '{ciudad}'. Código {respuesta.status_code}.")
             return []
     except requests.exceptions.RequestException as e:
-        print("Error: Ocurrió un problema al intentar conectarse a la API.")
-        print(f"Detalles técnicos: {e}")
+        Console.print("[bold_red]Error:[/bold_red] Ocurrió un problema al intentar conectarse a la API.")
+        Console.print(f"[bold_red]Detalles técnicos:[/bold_red] {e}")
         return []
 
     # Crear lista de pronósticos para los próximos 7 días
