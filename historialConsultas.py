@@ -25,6 +25,7 @@ def eliminar_consulta(indice):
         print("No hay consultas en el historial.")
         
         
-def borrarHistorial():
-    with open('historial.txt', 'w') as file:
-        pass
+def borrarHistorial(eliminar):
+    if eliminar == "s":
+        with open('historial.txt', 'w') as file:
+            pass

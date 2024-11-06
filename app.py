@@ -11,14 +11,15 @@ def mostrar_menu():
     print("2. Pronóstico extendido")
     print("3. Ver historial")
     print("4. Eliminar consulta")
-    print("5. Salir")
+    print("5. Borrar historial")
+    print("6. Salir")
     print("----------------")
 
 def main():
-    borrarHistorial()
+    borrarHistorial("s")
     while True:
         mostrar_menu()
-        opcion = input("Seleccione una opción (1-5): ")
+        opcion = input("Seleccione una opción (1-6): ")
 
         if opcion == '1':
             ciudad = input("Ingrese el nombre de la ciudad: ")
@@ -39,8 +40,13 @@ def main():
         elif opcion == '4':
             indice = int(input("Ingrese el número de la consulta a eliminar: "))
             eliminar_consulta(indice)
-        
+            
         elif opcion == '5':
+            eliminar = input("Seguro/a que desea eliminar todo el historial? (S/N): ")
+            
+            borrarHistorial(eliminar)
+        
+        elif opcion == '6':
                     print("Saliendo del programa...")
                     break
                 

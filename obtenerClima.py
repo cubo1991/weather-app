@@ -21,6 +21,7 @@ def obtener_clima(ciudad, unidad):
         print(f"Mínima: {clima['temp_min']}°{simbolo}")
         print(f"Humedad: {clima['humidity']}%")
         agregarAlHistorial(resultado)
+        agregarAlHistorial("-----------------")
     else:
         resultado = f"No se pudo obtener el clima para '{ciudad}' debido a un error."
         print(resultado)
