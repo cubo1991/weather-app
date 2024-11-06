@@ -1,4 +1,6 @@
+from rich.console import Console
 historial = []
+console = Console()
 
 def agregarAlHistorial(resultado):
     with open('historial.txt', 'a') as file:
@@ -9,7 +11,7 @@ def mostrarHistorial():
         with open('historial.txt', 'r') as file:
             print(file.read())
     except FileNotFoundError:
-        print("No hay consultas en el historial.")
+        console.print("[dark_orange3]No hay consultas en el historial.[/dark_orange3]")
     
 def eliminar_consulta(indice):
     try:
@@ -20,9 +22,9 @@ def eliminar_consulta(indice):
             with open('historial.txt', 'w') as file:
                 file.writelines(lines)
         else:
-            print("Índice fuera de rango.")
+            console.print("[bold_red]Índice fuera de rango.[/bold_red]")
     except FileNotFoundError:
-        print("No hay consultas en el historial.")
+        console.print("[dark_orange3]No hay consultas en el historial.[/dark_orange3]")
         
         
 def borrarHistorial(eliminar):
