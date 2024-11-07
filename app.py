@@ -12,13 +12,16 @@ from rich.progress import Progress, BarColumn, TextColumn
 from rich.prompt import Prompt
 from rich.box import SIMPLE
 import time
+from limpiarConsola import limpiar_consola
+from pronosticoExtendido import salida_con_barra
 
 #creamos una instancia de console para imprimir en la consola con rich
-Console = Console()
+console = Console()
+
 
 # Función para mostrar la barra de carga al salir del programa
 def salida_con_barra():
-    Console.print("[bold red]Saliendo del programa...[/bold red]")
+    console.print("[bold red]Saliendo del programa...[/bold red]")
     with Progress(
         TextColumn("[bold blue]{task.description}[/bold blue]"),
         BarColumn(bar_width=None),
@@ -32,7 +35,7 @@ def salida_con_barra():
 
 
 def mostrar_menu():
-    Console.print("🌞☁️ [bold green] Bienvenido a la Aplicación del Clima [/bold green]🌞☁️", justify="left")
+    console.print("🌞☁️ [bold green] Bienvenido a la Aplicación del Clima [/bold green]🌞☁️", justify="left")
     table = Table(title= "", box= SIMPLE, style= "blue")
     table.add_column("Opción", style="bold blue" )
     table.add_column("Descripción", style="bold cyan",width=30 )
@@ -42,60 +45,83 @@ def mostrar_menu():
     table.add_row("4", "Eliminar historial")
     table.add_row("5","Borrar historial")
     table.add_row("6","Salir")
-    Console.print(table)
+    console.print(table)
 
 
+funciona = True  # Variable global para controlar el bucle
 
 def main():
     borrarHistorial("s")
-    while True:
-        mostrar_menu()
-        opcion = Prompt.ask("[yellow4]Selecciona una opción (1-6)[/yellow4]")
-        # opcion = input("Seleccione una opción (1-6): ")
+  
+console = Console()
 
-        if opcion == '1':
-            # ciudad = input("Ingrese el nombre de la ciudad: ")
-            ciudad = Prompt.ask("[dark_sea_green]Ingrese el nombre de la ciudad [/dark_sea_green]")
-            # unidad = input("Ingrese la unidad de temperatura deseada: ")
-            unidad = Prompt.ask("[dark_sea_green]Ingrese la unidad de temperatura deseada: ('C' / 'F') [/dark_sea_green]")
-            cambiarTemperatura(unidad)
-            obtener_clima(ciudad, unidad)
+def opcion_1():
+    ciudad = Prompt.ask("[dark_sea_green]Ingrese el nombre de la ciudad [/dark_sea_green]")
+    unidad = Prompt.ask("[dark_sea_green]Ingrese la unidad de temperatura deseada: ('C' / 'F') [/dark_sea_green]")
+    cambiarTemperatura(unidad)
+    obtener_clima(ciudad, unidad)
+    Prompt.ask("presione enter para continuar")
+    limpiar_consola()
 
-        elif opcion == '2':
-            # ciudad = input("Ingrese el nombre de la ciudad: ")
-            ciudad = Prompt.ask("[deep_sky_blue3] Ingrese el nombre de la ciudad [/deep_sky_blue3]")
+def opcion_2():
+    ciudad = Prompt.ask("[deep_sky_blue3]Ingrese el nombre de la ciudad [/deep_sky_blue3]")
+    unidad = Prompt.ask("[deep_sky_blue3]Ingrese la unidad de temperatura deseada ('C' / 'F') [/deep_sky_blue3]")
+    pronostico_extendido(ciudad, unidad)
+    # Prompt.ask("presione enter para continuar")
+    # limpiar_consola()
 
-            # unidad = input("Ingrese la unidad de temperatura deseada: ")
-            unidad = Prompt.ask("[deep_sky_blue3] Ingrese la unidad de temperatura deseada ('C' / 'F') [/deep_sky_blue3]")
-            pronostico_extendido(ciudad, unidad)
+def opcion_3():
+    console.print("[dark_orange3]--------Historial--------[/dark_orange3]")
+    mostrarHistorial()
+    console.print("[dark_orange3]-------------------------[/dark_orange3]")
+    Prompt.ask("presione enter para continuar")
+    limpiar_consola()
 
-        elif opcion == '3':
-            Console.print("[dark_orange3]--------Historial--------[/dark_orange3]")
-            mostrarHistorial()
-            Console.print("[dark_orange3]-------------------------[/dark_orange3]")
+def opcion_4():
+    indice = console.input("[yellow]Ingrese el número de la consulta a eliminar:[/yellow] ")
+    indice = int(indice)  # Convierte la entrada a un número
+    eliminar_consulta(indice)
+    Prompt.ask("presione enter para continuar")
+    limpiar_consola()
 
-        elif opcion == '4':
-            # indice = int(input("Ingrese el número de la consulta a eliminar: "))
-            
-            indice = Console.input("[yellow]Ingrese el número de la consulta a eliminar:[/yellow] ")
-            indice = int(indice)  # Convierte la entrada a un número
-            eliminar_consulta(indice)
-            
-        elif opcion == '5':
-            # eliminar = input("Seguro/a que desea eliminar todo el historial? (S/N): ")
-            eliminar = Console.input("[yellow]Seguro/a que desea eliminar todo el historial? (S/N):[yellow] ")
-            
-            borrarHistorial(eliminar)
-        
-        elif opcion == '6':
-                    # print("Saliendo del programa...")
-                    salida_con_barra()
-                    break
-                
-        else:
-            Console.print("[red] ⚠️ Opción no válida. Por favor, intente de nuevo.⚠️ [/red]")
+def opcion_5():
+    eliminar = console.input("[yellow]Seguro/a que desea eliminar todo el historial? (S/N):[/yellow] ")
+    borrarHistorial(eliminar)
+    Prompt.ask("presione enter para continuar")
+    limpiar_consola()
+
+def opcion_6():
+    global funciona  # Indica que `funciona` es una variable global
+    salida_con_barra()
+    funciona = False  # Cambia `funciona` a False para salir del bucle
+    
+
+def opcion_invalida():
+    # console.print("[red] ⚠️ Opción no válida. Por favor, intente de nuevo.⚠️ [/red]")
+    resultado = f"[red]⚠️ Opción no válida. Por favor, intente de nuevo.[/red]⚠️"
+    console.print(f"[bold_red]Error: [/bold_red]{resultado}")
+    Prompt.ask("presione enter para continuar")
+    limpiar_consola()
+    
+
+# Diccionario de opciones
+opciones = {
+    '1': opcion_1,
+    '2': opcion_2,
+    '3': opcion_3,
+    '4': opcion_4,
+    '5': opcion_5,
+    '6': opcion_6,
+}
+
+# Bucle principal
+while funciona:
+    mostrar_menu()
+    opcion = Prompt.ask("[bold blue]Ingrese una opción[/bold blue]")
+    opciones.get(opcion, opcion_invalida)()  # Ejecuta la función correspondiente o `opcion_invalida`
+
 
 if __name__ == '__main__':
 
-    main()
+ main()
 

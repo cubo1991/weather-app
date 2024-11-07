@@ -10,6 +10,7 @@ from rich.box import SIMPLE
 from rich.progress import Progress,BarColumn, TextColumn
 from rich.prompt import Prompt
 import time
+from limpiarConsola import limpiar_consola
 
 console = Console()
 # Función para mostrar la barra de carga al salir del programa
@@ -124,13 +125,17 @@ def pronostico_extendido(ciudad, unidad):
         opcion = Prompt.ask("[magenta]Seleccione una opción (1-3):[/magenta] ")
 
         if opcion == '1' and indice_dia > 0:
+            limpiar_consola()
             indice_dia -= 1  # Moverse al día anterior
         elif opcion == '2' and indice_dia < len(dias) - 1:
+            limpiar_consola()
             indice_dia += 1  # Moverse al día siguiente
         elif opcion == '3':
-
+            
             salida_con_barra()
+            limpiar_consola()
             # print("Saliendo del pronóstico extendido...")
             break
         else:
             console.print("[red]⚠️ Opción no válida. Por favor, intente de nuevo.⚠️ [/red]")
+            limpiar_consola()
