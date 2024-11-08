@@ -19,38 +19,49 @@ def llamadaApi(ciudad, unidad):
         if respuesta.status_code == 200:
             return respuesta.json()  # Retornar los datos completos si la solicitud es exitosa
         elif respuesta.status_code == 401:
-            # print("Error: La clave API no es válida.")  # Clave API no válida
-            mensaje_error1 = "[red3]Error!:[/red3] La clave API no es válida"
+            mensaje_error1 = "[red3]La clave API no es válida[/red3]"
             panel_error1 = Panel(mensaje_error1, title="Error", style="red", border_style="bold red")
             Console.print(panel_error1)
 
         elif respuesta.status_code == 404:
-            # print(f"Error: La ciudad '{ciudad}' no fue encontrada.")  # Ciudad no válida
-            mensaje_error2 = f"[red3]Error!:[/red3] La ciudad '[bold green]{ciudad}[/bold green]' no fue encontrada"
-            panel_error2 = Panel(mensaje_error2, title="Error", style="red", border_style="bold red")
+            Console.print("\n")
+            mensaje_error2 = f"[red3]⚠️ La ciudad '[green]{ciudad}[/green]' no fue encontrada ⚠️[/red3]"
+            panel_error2 = Panel(mensaje_error2, title="ERROR", style="red", border_style="bold red")
             Console.print(panel_error2)
 
         else:
-            # print(f"Error: No se pudo obtener el clima para '{ciudad}'. Código {respuesta.status_code}.")
-            Console.print(f"[red3]Error!:[/red3] No se pudo obtener el clima para'{ciudad}'. Código'{respuesta.status_code}'")
+            Console.print("\n")
+            mensaje_error3 = f"[red3]⚠️ No se pudo obtener el clima para'{ciudad}'. Código'{respuesta.status_code}' ⚠️[/red3]"
+            panel_error3 = Panel(mensaje_error3, title="ERROR", style="red", border_style="bold red")
+            Console.print(panel_error3)
     
     except requests.exceptions.Timeout:
-        # print("Error: La solicitud a la API ha excedido el tiempo de espera.")
-        Console.print("[red3]Error!:[/red3] La solicitud a la API ha excedido el tiempo de espera. ")
+        Console.print("\n")
+        mensaje_error4 = f"[red3]⚠️ La solicitud a la API ha excedido el tiempo de espera. ⚠️[/red3] "
+        panel_error4 = Panel(mensaje_error4, title="ERROR", style="red", border_style="bold red")
+        Console.print(panel_error4)
+        
    
     except requests.exceptions.RequestException as e:
         error_message = str(e)
         if "getaddrinfo" in error_message:
-            # print("Error: No se pudo resolver el nombre del host de la API. Verifica tu conexión a Internet.")
-            Console.print("[red3]Error!:[/red3] No se pudo resolver el nombre del host de la API. Verifica tu conexión a Internet. ")
+            Console.print("\n")
+            mensaje_error5 = f"[red3]⚠️ No se pudo resolver el nombre del host de la API. Verifica tu conexión a Internet. ⚠️[/red3] "
+            panel_error5 = Panel(mensaje_error5, title="ERROR", style="red", border_style="bold red")
+            Console.print(panel_error5)
+            
 
         elif "Connection refused" in error_message:
-            # print("Error: La conexión a la API fue rechazada. Verifica que la API esté disponible.")
-            Console.print("[red3]Error!:[/red3] La conexión a la API fue rechazada. Verifica que la API esté disponible. ")
+            Console.print("\n")
+            mensaje_error6 = f"[red3]⚠️ La conexión a la API fue rechazada. Verifica que la API esté disponible. ⚠️[/red3]"
+            panel_error6 = Panel(mensaje_error6, title="ERROR", style="red", border_style="bold red")
+            Console,print(panel_error6)
 
         else:
-            # print("Error: Ocurrió un problema al intentar conectarse a la API.")
-            Console.print("[red3]Error!:[/red3] Ocurrió un problema al intentar conectarse a la API")
+            Console.print("\n")
+            mensaje_error7 = f"[red3]⚠️ Ocurrió un problema al intentar conectarse a la API ⚠️[/red3]"
+            panel_error7 =  Panel(mensaje_error7, title="ERROR", style="red", border_style="bold red")
+            Console.print(panel_error7)
             
         # print("Error: Ocurrió un problema al intentar conectarse a la API.")
         # print(f"Detalles técnicos: {e}")

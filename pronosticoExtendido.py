@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import datetime 
 from cambiarTemperatura import cambiarTemperatura 
 ####
+from rich.panel import Panel
 from rich.console import Console
 from rich.table import Table
 from rich.box import SIMPLE
@@ -40,10 +41,14 @@ def pronostico_extendido(ciudad, unidad):
             datos = respuesta.json()
             coordenadas = datos["coord"]
         elif respuesta.status_code == 404:
-            console.print(f"[bold_red]Error:[/bold_red] La ciudad '{ciudad}' no fue encontrada.")
+            mensajeError = f"[bold_red]Error:[/bold_red] La ciudad '{ciudad}' no fue encontrada."
+            panelError = Panel(mensajeError, title="ERROR", style="red", border_style="bold red")
+            console.print(panelError)
             return []
         else:
-            console.print(f"[bold_red]Error:[/bold_red] No se pudo obtener el clima para '{ciudad}'. Código {respuesta.status_code}.")
+            mensajeError1 = f"[bold_red]Error:[/bold_red] No se pudo obtener el clima para '{ciudad}'. Código {respuesta.status_code}."
+            panelError1 = Panel(mensajeError1,title="ERROR", style="red", border_style="bold red")
+            console.print(panelError1)
             return []
     except requests.exceptions.RequestException as e:
         console.print("[bold_red]Error:[/vold_red] Ocurrió un problema al intentar conectarse a la API.")
@@ -91,7 +96,7 @@ def pronostico_extendido(ciudad, unidad):
         dia_actual = dias[indice_dia]
 
         # Crear la tabla para mostrar el pronóstico de un solo día
-        tabla = Table(show_header=True, title=f"pronostico de {ciudad}",title_style="bold", header_style="bold cyan", box=SIMPLE)
+        tabla = Table(show_header=True, title=f"[bold blue]pronostico de {ciudad} [/bold blue]",title_style="bold", header_style="bold cyan", box=SIMPLE)
         tabla.add_column("Fecha", style="bold")
         tabla.add_column("Temperatura", justify="center", style="bold green")
         tabla.add_column("Mínima", justify="center", style="bold yellow")
@@ -115,14 +120,14 @@ def pronostico_extendido(ciudad, unidad):
         console.print(tabla)
 
         # Menú de navegación
-        console.print("\n[purple4] Opciones de navegación:[/purple4]")
+        console.print("\n[bold green] Opciones de navegación:[/bold green]")
         if indice_dia > 0:
-            console.print("[bold_blue]1. [/bold_blue] [blue_violet] Día anterior[/blue_violet]")
+            console.print("[#5f5fd7]1. Día anterior[/#5f5fd7]")
         if indice_dia < len(dias) - 1:
-            console.print("[bold_blue]2. [/bold_blue] [blue_violet] Día siguiente[/blue_violet]")
-        console.print("[bold_blue]3. [/bold_blue] [blue_violet] Salir del pronóstico extendido[/blue_violet]")
+            console.print("[#5f00ff]2. Día siguiente[/#5f00ff]")
+        console.print("[red]3.Salir del pronóstico extendido[/red]")
 
-        opcion = Prompt.ask("[magenta]Seleccione una opción (1-3):[/magenta] ")
+        opcion = Prompt.ask("[#5f8787]Seleccione una opción (1-3):[/#5f8787] ")
 
         if opcion == '1' and indice_dia > 0:
             limpiar_consola()
